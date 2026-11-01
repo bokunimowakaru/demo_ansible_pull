@@ -1,0 +1,2 @@
+2026/11/01 13:11 Hello, OTA demo version 0.1
+2026/11/01 13:12 Hello, OTA demo version 0.1

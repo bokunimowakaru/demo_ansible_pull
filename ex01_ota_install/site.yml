@@ -1,0 +1,15 @@
+- name: OTA demo setup
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: 1. Create application directory
+      ansible.builtin.file:
+        path: /opt/ota-demo
+        state: directory
+        mode: '0755'
+    - name: 2. Install application
+      ansible.builtin.copy:
+        src: files/hello-ota.sh
+        dest: /opt/ota-demo/hello-ota.sh
+        mode: '0755'
