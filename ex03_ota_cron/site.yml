@@ -1,4 +1,6 @@
 - name: Schedule daily OTA update
+  hosts: localhost
+  connection: local
   tasks:
     - name: 1. インストール用フォルダを作成する Create application directory
       ansible.builtin.file:
