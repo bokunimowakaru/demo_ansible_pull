@@ -1,5 +1,5 @@
 - name: OTA demo setup
-  hosts: raspberrypi,localhost
+  hosts: localhost
   connection: local
   tasks:
     - name: 1. インストール用フォルダを作成する Create application directory
