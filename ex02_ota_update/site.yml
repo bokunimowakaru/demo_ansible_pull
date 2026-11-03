@@ -1,0 +1,20 @@
+- name: OTA demo setup with daily OTA update
+  hosts: raspberrypi,localhost
+  connection: local
+  become: true
+  tasks:
+    - name: 1. インストール用フォルダを作成する Create application directory
+      ansible.builtin.file:
+        path: /opt/ota-demo
+        state: directory
+        mode: '0755'
+    - name: 2. ソフト「hello-ota.sh」を更新する Update application
+      ansible.builtin.copy:
+        src: files/hello-ota.sh
+        dest: /opt/ota-demo/hello-ota.sh
+        mode: '0755'
+    - name: 3. 更新ソフト「update.sh」をインストールする Install Updater
+      ansible.builtin.copy:
+        src: files/hello-ota.sh
+        dest: /opt/ota-demo/hello-ota.sh
+        mode: '0755'
