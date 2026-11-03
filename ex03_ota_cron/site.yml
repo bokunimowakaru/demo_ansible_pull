@@ -1,0 +1,38 @@
+- name: Schedule daily OTA update
+  tasks:
+    - name: 1. インストール用フォルダを作成する Create application directory
+      ansible.builtin.file:
+        path: /opt/ota-demo
+        state: directory
+        mode: '0755'
+      become: true
+    - name: 2. ログ記録用フォルダを作成する Create log files directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/ota-log"
+        state: directory
+        mode: '0755'
+    - name: 3. ログファイルを作成する Create or update log file
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/ota-log/demo_ansible.log"
+        state: touch
+        mode: '0644'
+    - name: 4. ソフト「hello-ota.sh」を更新する Update application
+      ansible.builtin.copy:
+        src: files/hello-ota.sh
+        dest: /opt/ota-demo/hello-ota.sh
+        mode: '0755'
+      become: true
+    - name: 5. ソフト「hello-ota.sh」を実行する Run application
+      ansible.builtin.command:
+        cmd: /opt/ota-demo/hello-ota.sh
+    - name: 6. 更新ソフト「update.sh」をインストールする Install Updater
+      ansible.builtin.copy:
+        src: files/update.sh
+        dest: /opt/ota-demo/update.sh
+        mode: '0755'
+      become: true
+    - name: 7. 更新ソフトの自動実行(AM 3:00)を設定する Schedule daily OTA update
+      ansible.builtin.cron:
+        minute: "0"
+        hour: "3"
+        job: /opt/ota-demo/update.sh
