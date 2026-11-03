@@ -5,7 +5,7 @@ set -e      # コマンドの終了コード($!)が0以外のときに実行を�
 echo `date "+%Y/%m/%d %R"` "[Demo Ansible][ex02]: Updater Started" | tee -a ~/ota-log/demo_ansible.log
 
 # Playbookを実行
-ansible-pull -o
+ansible-pull -o \
     -U https://bokunimo.net/git/demo_ansible_pull.git \
     -i localhost, \
     -c local \
