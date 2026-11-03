@@ -1,25 +1,23 @@
 - name: OTA demo setup
   hosts: raspberrypi,localhost
   connection: local
-  become: true
   tasks:
     - name: 1. インストール用フォルダを作成する Create application directory
       ansible.builtin.file:
         path: /opt/ota-demo
         state: directory
         mode: '0755'
+      become: true
     - name: 2. ログ記録用フォルダを作成する Create log files directory
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log"
         state: directory
         mode: '0755'
-      become: false
     - name: 3. ログファイルを作成する Create or update log file
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log/demo_ansible.log"
         state: touch
         mode: '0644'
-      become: false
     - name: 4. ソフト「hello-ota.sh」をインストールする Install application
       ansible.builtin.copy:
         src: files/hello-ota.sh
@@ -28,4 +26,3 @@
     - name: 5. ソフト「hello-ota.sh」を実行する Run application
       ansible.builtin.command:
         cmd: /opt/ota-demo/hello-ota.sh
-      become: false
