@@ -8,16 +8,28 @@
         path: /opt/ota-demo
         state: directory
         mode: '0755'
-    - name: 2. ソフト「hello-ota.sh」を更新する Update application
+    - name: 2. ログ記録用フォルダを作成する Create log files directory
+      ansible.builtin.file:
+        path: ~/ota-log
+        state: directory
+        mode: '0755'
+      become: false
+    - name: 3. ログファイルを作成する Create or update log file
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/ota-log/demo_ansible.log"
+        state: touch
+        mode: '0644'
+      become: false
+    - name: 4. ソフト「hello-ota.sh」を更新する Update application
       ansible.builtin.copy:
         src: files/hello-ota.sh
         dest: /opt/ota-demo/hello-ota.sh
         mode: '0755'
-    - name: 3. ソフト「hello-ota.sh」を実行する Run application
+    - name: 5. ソフト「hello-ota.sh」を実行する Run application
       ansible.builtin.command:
         cmd: /opt/ota-demo/hello-ota.sh
       become: false
-    - name: 4. 更新ソフト「update.sh」をインストールする Install Updater
+    - name: 6. 更新ソフト「update.sh」をインストールする Install Updater
       ansible.builtin.copy:
         src: files/update.sh
         dest: /opt/ota-demo/update.sh
