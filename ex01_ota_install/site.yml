@@ -15,5 +15,5 @@
         mode: '0755'
     - name: 3. ソフト「hello-ota.sh」を実行する Run application
       ansible.builtin.command:
-        cmd: /opt/ota-demo/ota-demo-app/hello-ota.sh
-        become: false
+        cmd: /opt/ota-demo/hello-ota.sh
+      become: false
