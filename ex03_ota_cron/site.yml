@@ -38,3 +38,4 @@
         minute: "0"
         hour: "3"
         job: /opt/ota-demo/update.sh
+      become: true
