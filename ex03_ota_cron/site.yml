@@ -33,7 +33,7 @@
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
-    - name: 7. 更新ソフトの自動実行AM 3:00を設定する Schedule daily OTA update
+    - name: 7. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
       ansible.builtin.cron:
         minute: "0"
         hour: "3"
