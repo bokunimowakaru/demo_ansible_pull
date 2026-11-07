@@ -21,4 +21,9 @@
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log"
         state: absent
+    - name: 5. rootのログファイルを削除する Remove log directory for root user
+      ansible.builtin.file:
+        path: /root/ota-log
+        state: absent
+      become: true
 ...

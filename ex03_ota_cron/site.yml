@@ -53,5 +53,5 @@
         name: "Daily OTA update"
         minute: "0"
         hour: "3"
-        job: /opt/ota-demo/update.sh
+        job: "/usr/bin/sudo -n /opt/ota-demo/update.sh"
 ...
