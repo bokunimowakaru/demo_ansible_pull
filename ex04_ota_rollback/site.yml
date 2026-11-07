@@ -36,6 +36,7 @@
             src: files/hello-ota.sh
             dest: /opt/ota-demo/hello-ota.sh
             mode: '0755'
+          become: true
         - name: Check application
           ansible.builtin.command:
             cmd: /opt/ota-demo/hello-ota.sh
@@ -48,6 +49,7 @@
             dest: /home/pi/ota-demo-app/hello-ota.sh
             remote_src: true
             mode: '0755'
+          become: true
         - name: Rollback 5. 失敗メッセージ Report rollback
           ansible.builtin.fail:
             msg: "OTA failed. Previous version restored."
