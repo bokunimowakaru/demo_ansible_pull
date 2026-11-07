@@ -45,8 +45,8 @@
       rescue: # 更新失敗時にバックアップを戻す(Try 1と2の同時失敗は考慮しない)
         - name: Rollback 4. バックアップを戻す Restore previous application
           ansible.builtin.copy:
-            src: /home/pi/ota-demo-app/hello-ota.sh.bak
-            dest: /home/pi/ota-demo-app/hello-ota.sh
+            src: /opt/ota-demo/hello-ota.sh.bak
+            dest: /opt/ota-demo/hello-ota.sh
             remote_src: true
             mode: '0755'
           become: true
