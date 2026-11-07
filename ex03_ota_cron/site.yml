@@ -1,3 +1,4 @@
+---
 - name: Schedule daily OTA update
   hosts: localhost
   connection: local
@@ -39,3 +40,4 @@
         minute: "0"
         hour: "3"
         job: /opt/ota-demo/update.sh
+...
