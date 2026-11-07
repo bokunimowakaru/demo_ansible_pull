@@ -29,13 +29,13 @@
         cmd: /opt/ota-demo/hello-ota.sh
     - name: 6. 更新ソフト「update.sh」をインストールする Install Updater
       ansible.builtin.copy:
-        name: "Daily OTA update"
         src: files/update.sh
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
     - name: 7. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
       ansible.builtin.cron:
+        name: "Daily OTA update"
         minute: "0"
         hour: "3"
         job: /opt/ota-demo/update.sh
