@@ -8,7 +8,7 @@ echo `date "+%Y/%m/%d %R"` "[Demo Ansible][ex04]: Updater Started" | tee -a ~/ot
 ansible-pull -o \
     -U https://bokunimo.net/git/demo_ansible_pull.git \
     -c local \
-    ex04_ota_cron/site.yml 2>> ~/ota-log/demo_ansible.log
+    ex04_ota_rollback/site.yml 2>> ~/ota-log/demo_ansible.log
 
 # 終了ログを出力
 echo `date "+%Y/%m/%d %R"` "[Demo Ansible][ex04]: Updater Done jobs" | tee -a ~/ota-log/demo_ansible.log
