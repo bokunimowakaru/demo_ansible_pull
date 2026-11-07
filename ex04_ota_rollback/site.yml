@@ -37,7 +37,7 @@
             dest: /opt/ota-demo/hello-ota.sh
             mode: '0755'
           become: true
-        - name: Check application
+        - name: Try 3. 実行し、その出力が正常であることを確認する Check application
           ansible.builtin.command:
             cmd: /opt/ota-demo/hello-ota.sh
           register: app_result

@@ -1,0 +1,72 @@
+---
+- name: OTA with rollback for error testing
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: 1. 更新前のバックアップ Backup current application
+      block: # 試行の開始
+        - name: Try 1. Copy hello-ota.sh
+          ansible.builtin.copy:
+            src: /opt/ota-demo/hello-ota.sh
+            dest: /opt/ota-demo/hello-ota.sh.bak
+            remote_src: true
+            mode: '0755'
+          become: true
+      rescue: # 更新前のバックアップを失敗した時にフォルダ構成を再構築
+        - name: Rollback 1. インストール用フォルダを作成する Create application directory
+          ansible.builtin.file:
+            path: /opt/ota-demo
+            state: directory
+            mode: '0755'
+          become: true
+        - name: Rollback 2. ログ記録用フォルダを作成する Create log files directory
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/ota-log"
+            state: directory
+            mode: '0755'
+        - name: Rollback 3. ログファイルを作成する Create or update log file
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/ota-log/demo_ansible.log"
+            state: touch
+            mode: '0644'
+    - name: 2. ソフト「hello-ota.sh」を更新してから実行する Update and run application
+      block: # 試行の開始
+        - name: Try 2. Install new application
+          ansible.builtin.copy:
+            src: files/hello-ota.sh
+            dest: /opt/ota-demo/hello-ota.sh
+            mode: '0755'
+          become: true
+        - name: Try 3. 意図的にエラーを発生させる(ex04をex03に書き換え) Test case for error
+          ansible.builtin.command:
+            cmd: sed -i "s/\[ex04/\[ex03/" /opt/ota-demo/hello-ota.sh
+          become: true
+        - name: Try 4. 実行し、その出力が正常であることを確認する Check application
+          ansible.builtin.command:
+            cmd: /opt/ota-demo/hello-ota.sh
+          register: app_result
+          failed_when: app_result.rc != 0 or '[Demo Ansible][ex04]' not in app_result.stdout
+      rescue: # 更新失敗時にバックアップを戻す(Try 1と2の同時失敗は考慮しない)
+        - name: Rollback 4. バックアップを戻す Restore previous application
+          ansible.builtin.copy:
+            src: /home/pi/ota-demo-app/hello-ota.sh.bak
+            dest: /home/pi/ota-demo-app/hello-ota.sh
+            remote_src: true
+            mode: '0755'
+          become: true
+        - name: Rollback 5. 失敗メッセージ Report rollback
+          ansible.builtin.fail:
+            msg: "OTA failed. Previous version restored."
+    - name: 3. 更新ソフト「update.sh」をインストールする Install Updater
+      ansible.builtin.copy:
+        src: files/update.sh
+        dest: /opt/ota-demo/update.sh
+        mode: '0755'
+      become: true
+    - name: 4. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
+      ansible.builtin.cron:
+        name: "Daily OTA update"
+        minute: "0"
+        hour: "3"
+        job: /opt/ota-demo/update.sh
+...
