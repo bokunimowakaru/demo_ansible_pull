@@ -7,12 +7,17 @@
       ansible.builtin.cron:
         name: "Daily OTA update"
         state: absent
-    - name: 2. インストールしたソフトを削除 Remove OTA demo directory and files
+    - name: 2. 許可したsudo設定を削除する Remove OTA sudoers configuration
+      ansible.builtin.file:
+        path: /etc/sudoers.d/ota-demo
+        state: absent
+      become: true
+    - name: 3. インストールしたソフトを削除 Remove OTA demo directory and files
       ansible.builtin.file:
         path: /opt/ota-demo
         state: absent
       become: true
-    - name: 3. ログファイルを削除する Remove log files directory and files
+    - name: 4. ログファイルを削除する Remove log files directory and files
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log"
         state: absent
