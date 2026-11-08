@@ -18,26 +18,30 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
    sudo apt update
    sudo apt install -y ansible git
    ```
-3. このリポジトリを取得して、ディレクトリに移動します。
+3. このリポジトリを取得して、ディレクトリに移動します。※この作業は省略可能です
    ```sh
    git clone https://bokunimo.net/git/demo_ansible_pull.git
    cd demo_ansible_pull
    ```
-4. 試したい例のスクリプトを実行します（例：初回インストール）。
+4. スクリプトを実行します（例：初回インストール）。
+   ```sh
+   curl -fsL https://bokunimo.net/cq/ansib1|bash
+   ```
+   Gitでcloneしていた場合は、下記のコマンドで実行できます。
    ```sh
    bash ex01_ota.sh
    ```
    - 実行ユーザーにsudo権限が必要です。
    - `-K` による権限昇格のため、実行時にパスワードを求められます。
-5. 日次更新の例では、`ex03_ota.sh` を実行すると毎日午前3時の更新ジョブが設定されます。アンインストール例は `/opt/ota-demo` とホームディレクトリ内の `ota-log` を削除するため注意してください。
+6. 日次更新の例`exo3`では、`ex03_ota.sh` を実行すると毎日午前3時の更新ジョブが設定されます。アンインストール例`ex05`は `/opt/ota-demo` とホームディレクトリ内の `ota-log` を削除するため注意してください。
 
 ## Playbook の一覧
 
 | Playbook | 説明 |
 | --- | --- |
-| [ex01_ota_install](ex01_ota_install/site.yml) | アプリとログ用ファイルを用意し、サンプルアプリをインストールして実行します。 |
-| [ex02_ota_update](ex02_ota_update/site.yml) | サンプルアプリを更新して実行し、更新用スクリプトを配置します。 |
-| [ex03_ota_cron](ex03_ota_cron/site.yml) | 更新用スクリプトを配置し、毎日午前3時に実行する cron を設定します。 |
-| [ex04_ota_rollback](ex04_ota_rollback/site.yml) | 更新前にアプリをバックアップし、更新や確認に失敗した場合は復元します。 |
-| [ex04_ota_rollback_error](ex04_ota_rollback_error/site.yml) | アプリの確認を意図的に失敗させ、バックアップからのロールバックを試します。 |
-| [ex05_ota_uninstall](ex05_ota_uninstall/site.yml) | cron の更新ジョブを解除し、アプリとログ用ファイルを削除します。 |
+| [ex01_ota_install](ex01_ota_install/site.yml) | アプリとログ用ファイルを用意し、サンプルアプリをインストールして実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib1\|bash' |
+| [ex02_ota_update](ex02_ota_update/site.yml) | サンプルアプリを更新して実行し、更新用スクリプトを配置します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib2\|bash' |
+| [ex03_ota_cron](ex03_ota_cron/site.yml) | 更新用スクリプトを配置し、毎日午前3時に実行する cron を設定します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib3\|bash' |
+| [ex04_ota_rollback](ex04_ota_rollback/site.yml) | 更新前にアプリをバックアップし、更新や確認に失敗した場合は復元します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4\|bash' |
+| [ex04_ota_rollback_error](ex04_ota_rollback_error/site.yml) | アプリの確認を意図的に失敗させ、バックアップからのロールバックを試します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4e\|bash' |
+| [ex05_ota_uninstall](ex05_ota_uninstall/site.yml) | cron の更新ジョブを解除し、アプリとログ用ファイルを削除します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib5\|bash'|
