@@ -38,7 +38,7 @@
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
-    - name: 7. 更新ソフトをパスワードなしsudoに Configure passwordless sudo
+    - name: 7. 更新ソフトにパスワードなしsudo許可を設定 Password-less sudo
       ansible.builtin.copy:
         dest: /etc/sudoers.d/ota-demo
         owner: root

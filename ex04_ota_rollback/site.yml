@@ -59,10 +59,20 @@
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
-    - name: 4. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
+    - name: 4. 更新ソフトにパスワードなしsudo許可を設定 Password-less sudo
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/ota-demo
+        owner: root
+        group: root
+        mode: '0440'
+        content: |
+          {{ ota_user }} ALL=(root) NOPASSWD: /opt/ota-demo/update.sh
+        validate: '/usr/sbin/visudo -cf %s'
+      become: true
+    - name: 5. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
       ansible.builtin.cron:
         name: "Daily OTA update"
         minute: "0"
         hour: "3"
-        job: "/usr/bin/sudo -n /opt/ota-demo/update.sh"
+        job: "/usr/bin/sudo -n /opt/ota-demo/update.sh {{ ansible_env.HOME }}/ota-log/demo_ansible.log"
 ...
