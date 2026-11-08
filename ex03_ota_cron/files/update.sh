@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e      # コマンドの終了コード($!)が0以外のときに実行を中断する設定
+if [ $# -ge 1 ]; then
+    HOME=$1
+fi
 
 # 開始ログを出力
 echo `date "+%Y/%m/%d %R"` "[Demo Ansible][ex03]: Updater Started" | tee -a ~/ota-log/demo_ansible.log

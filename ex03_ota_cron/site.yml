@@ -53,5 +53,5 @@
         name: "Daily OTA update"
         minute: "0"
         hour: "3"
-        job: "HOME={{ ansible_env.HOME }} /usr/bin/sudo -n /usr/local/sbin/ota-update"
+        job: "/usr/bin/sudo -n /opt/ota-demo/update.sh {{ ansible_env.HOME }}/ota-log/demo_ansible.log"
 ...
