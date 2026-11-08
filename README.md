@@ -18,7 +18,7 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
    sudo apt update
    sudo apt install -y ansible git
    ```
-3. このリポジトリを取得して、ディレクトリに移動します。※この作業は省略可能です
+3. (省略可能) GitHub上のリポジトリを取得して、ディレクトリに移動します。
    ```sh
    git clone https://bokunimo.net/git/demo_ansible_pull.git
    cd demo_ansible_pull
@@ -32,8 +32,17 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
    bash ex01_ota.sh
    ```
    - 実行ユーザーにsudo権限が必要です。
-   - `-K` による権限昇格のため、実行時にパスワードを求められます。
-6. 日次更新の例`exo3`では、`ex03_ota.sh` を実行すると毎日午前3時の更新ジョブが設定されます。アンインストール例`ex05`は `/opt/ota-demo` とホームディレクトリ内の `ota-log` を削除するため注意してください。
+5. root権限昇格のため、実行時にパスワードを求められますので、実行ユーザのパスワードを入力してください。
+      ```
+      BECOME password: (実行ユーザのパスワードを入力)
+      ```
+5. 模擬アプリケーション `/opt/ota-demo/hello-ota.sh` が実行され、`~/ota-log/demo_ansible.log`に以下のようなメッセージが保存されます。
+   ```
+   pi@raspberrypi:~ $ cat ~/ota-log/demo_ansible.log
+   2026/11/08 10:33 [Demo Ansible][ex01]: Hello, world! - version ex01
+   ```
+
+- 日次更新の例`exo3`では、`ex03_ota.sh` を実行すると毎日午前3時の更新ジョブが設定されます。アンインストール例`ex05`は `/opt/ota-demo` とホームディレクトリ内の demo_ansible.log` を削除するため注意してください。
 
 ## Playbook の一覧
 
