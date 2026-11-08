@@ -2,6 +2,10 @@
 - name: Uninstall OTA demo
   hosts: localhost
   connection: local
+  pre_tasks:
+    - name: Pre 0. 実行ユーザー名を取得する Read the original execution user
+      ansible.builtin.set_fact:
+        ota_user: "{{ ansible_user_id }}"
   tasks:
     - name: 1. 更新ソフトの自動実行を解除する Remove daily OTA update cron job
       ansible.builtin.cron:

@@ -2,6 +2,10 @@
 - name: OTA with rollback
   hosts: localhost
   connection: local
+  pre_tasks:
+    - name: Pre 0. 実行ユーザー名を取得する Read the original execution user
+      ansible.builtin.set_fact:
+        ota_user: "{{ ansible_user_id }}"
   tasks:
     - name: 1. 更新前のバックアップ Backup current application
       block: # 試行の開始
