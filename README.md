@@ -36,7 +36,7 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
       ```
       BECOME password: (実行ユーザのパスワードを入力)
       ```
-5. 模擬アプリケーション `/opt/ota-demo/hello-ota.sh` が実行され、`~/ota-log/demo_ansible.log`に以下のようなメッセージが保存されます。
+6. 模擬アプリケーション `/opt/ota-demo/hello-ota.sh` が実行され、`~/ota-log/demo_ansible.log`に以下のようなメッセージが保存されます。
    ```
    pi@raspberrypi:~ $ cat ~/ota-log/demo_ansible.log
    2026/11/08 10:33 [Demo Ansible][ex01]: Hello, world! - version ex01
