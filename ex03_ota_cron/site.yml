@@ -40,7 +40,7 @@
       become: true
     - name: 7. 更新ソフトをパスワードなしsudoに Configure passwordless sudo
       ansible.builtin.copy:
-        dest: /opt/ota-demo/update.sh
+        dest: /etc/sudoers.d/ota-demo
         owner: root
         group: root
         mode: '0440'
