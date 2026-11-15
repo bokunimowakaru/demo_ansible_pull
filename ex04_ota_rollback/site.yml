@@ -57,13 +57,13 @@
         - name: Rollback 5. 失敗メッセージ Report rollback
           ansible.builtin.fail:
             msg: "OTA failed. Previous version restored."
-    - name: 3. 更新ソフト「update.sh」をインストールする Install Updater
+    - name: 3. 更新ツール「update.sh」をインストールする Install Updater
       ansible.builtin.copy:
         src: files/update.sh
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
-    - name: 4. 更新ソフトにパスワードなしsudo許可を設定 Password-less sudo
+    - name: 4. 更新ツールにパスワードなしsudo許可を設定 Password-less sudo
       ansible.builtin.copy:
         dest: /etc/sudoers.d/ota-demo
         owner: root
@@ -73,7 +73,7 @@
           {{ ota_user }} ALL=(root) NOPASSWD: /opt/ota-demo/update.sh
         validate: '/usr/sbin/visudo -cf %s'
       become: true
-    - name: 5. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
+    - name: 5. 更新ツールの自動実行AM3時を設定する Schedule daily OTA update
       ansible.builtin.cron:
         name: "Daily OTA update"
         minute: "0"

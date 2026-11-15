@@ -7,7 +7,7 @@
       ansible.builtin.set_fact:
         ota_user: "{{ ansible_user_id }}"
   tasks:
-    - name: 1. 更新ソフトの自動実行を解除する Remove daily OTA update cron job
+    - name: 1. 更新ツールの自動実行を解除する Remove daily OTA update cron job
       ansible.builtin.cron:
         name: "Daily OTA update"
         state: absent

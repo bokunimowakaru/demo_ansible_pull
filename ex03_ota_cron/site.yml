@@ -32,13 +32,13 @@
     - name: 5. ソフト「hello-ota.sh」を実行する Run application
       ansible.builtin.command:
         cmd: /opt/ota-demo/hello-ota.sh
-    - name: 6. 更新ソフト「update.sh」をインストールする Install Updater
+    - name: 6. 更新ツール「update.sh」をインストールする Install Updater
       ansible.builtin.copy:
         src: files/update.sh
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
-    - name: 7. 更新ソフトにパスワードなしsudo許可を設定 Password-less sudo
+    - name: 7. 更新ツールにパスワードなしsudo許可を設定 Password-less sudo
       ansible.builtin.copy:
         dest: /etc/sudoers.d/ota-demo
         owner: root
@@ -48,7 +48,7 @@
           {{ ota_user }} ALL=(root) NOPASSWD: /opt/ota-demo/update.sh
         validate: '/usr/sbin/visudo -cf %s'
       become: true
-    - name: 8. 更新ソフトの自動実行AM3時を設定する Schedule daily OTA update
+    - name: 8. 更新ツールの自動実行AM3時を設定する Schedule daily OTA update
       ansible.builtin.cron:
         name: "Daily OTA update"
         minute: "0"
