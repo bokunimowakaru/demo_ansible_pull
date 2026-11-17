@@ -9,14 +9,14 @@
   tasks:
     - name: 1. 更新前のバックアップ Backup current application
       block: # 試行の開始
-        - name: Try 1. Copy hello-ota.sh
+        - name: Try 1. ソフトをバックアップ Backup hello-ota.sh
           ansible.builtin.copy:
             src: /opt/ota-demo/hello-ota.sh
             dest: /opt/ota-demo/hello-ota.sh.bak
             remote_src: true
             mode: '0755'
           become: true
-      rescue: # 更新前のバックアップを失敗した時にフォルダ構成を再構築
+      rescue: # バックアップに失敗した時にフォルダ構成を再構築
         - name: Rollback 1. インストール用フォルダを作成する Create application directory
           ansible.builtin.file:
             path: /opt/ota-demo
@@ -33,9 +33,9 @@
             path: "{{ ansible_env.HOME }}/ota-log/demo_ansible.log"
             state: touch
             mode: '0644'
-    - name: 2. ソフト「hello-ota.sh」を更新してから実行する Update and run application
+    - name: 2. デモ用ソフト「hello-ota.sh」を更新し、実行する Update and run application
       block: # 試行の開始
-        - name: Try 2. Install new application
+        - name: Try 2. ソフトを更新する Update application
           ansible.builtin.copy:
             src: files/hello-ota.sh
             dest: /opt/ota-demo/hello-ota.sh
@@ -45,7 +45,7 @@
           ansible.builtin.command:
             cmd: sed -i "s/\[ex04/\[ex03/" /opt/ota-demo/hello-ota.sh
           become: true
-        - name: Try 4. 実行し、その出力が正常であることを確認する Check application
+        - name: Try 4. 実行した出力値を確認する Check application
           ansible.builtin.command:
             cmd: /opt/ota-demo/hello-ota.sh
           register: app_result
@@ -67,7 +67,17 @@
         dest: /opt/ota-demo/update.sh
         mode: '0755'
       become: true
-    - name: 4. 更新ツールの自動実行AM3時を設定する Schedule daily OTA update
+    - name: 4. 更新ツールにパスワードなしsudo許可を設定 Password-less sudo
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/ota-demo
+        owner: root
+        group: root
+        mode: '0440'
+        content: |
+          {{ ota_user }} ALL=(root) NOPASSWD: /opt/ota-demo/update.sh
+        validate: '/usr/sbin/visudo -cf %s'
+      become: true
+    - name: 5. 更新ツールの自動実行AM3時を設定する Schedule daily OTA update
       ansible.builtin.cron:
         name: "Daily OTA update"
         minute: "0"
