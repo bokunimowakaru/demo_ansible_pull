@@ -48,9 +48,9 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
 
 | Playbook | 説明 |
 | --- | --- |
-| [ex01_ota_install](ex01_ota_install/site.yml) | アプリとログ用ファイルを用意し、サンプルアプリをインストールして実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib1\|bash' |
-| [ex02_ota_update](ex02_ota_update/site.yml) | サンプルアプリを更新して実行し、更新用スクリプトを配置します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib2\|bash' |
-| [ex03_ota_cron](ex03_ota_cron/site.yml) | 更新用スクリプトを配置し、毎日午前3時に実行する cron を設定します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib3\|bash' |
-| [ex04_ota_rollback](ex04_ota_rollback/site.yml) | 更新前にアプリをバックアップし、更新や確認に失敗した場合は復元します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4\|bash' |
-| [ex04_ota_rollback_error](ex04_ota_rollback_error/site.yml) | アプリの確認を意図的に失敗させ、バックアップからのロールバックを試します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4e\|bash' |
-| [ex05_ota_uninstall](ex05_ota_uninstall/site.yml) | cron の更新ジョブを解除し、アプリとログ用ファイルを削除します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib5\|bash'|
+| [ex01_ota_install](ex01_ota_install/site.yml) | デモ用ソフトをインストールして実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib1\|bash' |
+| [ex02_ota_update](ex02_ota_update/site.yml) | デモ用ソフトの更新と、更新ツールのインストールを実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib2\|bash' |
+| [ex03_ota_cron](ex03_ota_cron/site.yml) | 毎日午前3時に更新を実行する cron を設定します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib3\|bash' |
+| [ex04_ota_rollback](ex04_ota_rollback/site.yml) | デモ用ソフトの更新を実行し、更新に失敗した場合は復元します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4\|bash' |
+| [ex04_ota_rollback_error](ex04_ota_rollback_error/site.yml) | 更新失敗を模擬し、バックアップからの復元を試します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4e\|bash' |
+| [ex05_ota_uninstall](ex05_ota_uninstall/site.yml) | デモ用ソフトや更新ツール、ログ、cron 設定を消去します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib5\|bash'|
