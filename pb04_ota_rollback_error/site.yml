@@ -1,5 +1,5 @@
 ---
-- name: OTA with rollback
+- name: OTA with rollback for error testing
   hosts: localhost
   connection: local
   pre_tasks:
@@ -41,11 +41,15 @@
             dest: /opt/ota-demo/hello-ota.sh
             mode: '0755'
           become: true
-        - name: Try 3. 実行した出力値を確認する Check application
+        - name: Try 3. 意図的にエラーを発生させる(pb04をpb03に書き換え) Test case for error
+          ansible.builtin.command:
+            cmd: sed -i "s/\[pb04/\[pb03/" /opt/ota-demo/hello-ota.sh
+          become: true
+        - name: Try 4. 実行した出力値を確認する Check application
           ansible.builtin.command:
             cmd: /opt/ota-demo/hello-ota.sh
           register: app_result
-          failed_when: app_result.rc != 0 or '[Demo Ansible][ex04]' not in app_result.stdout
+          failed_when: app_result.rc != 0 or '[Demo Ansible][pb04]' not in app_result.stdout
       rescue: # 更新失敗時にバックアップを戻す(Try 1と2の同時失敗は考慮しない)
         - name: Rollback 4. バックアップを戻す Restore previous application
           ansible.builtin.copy:
