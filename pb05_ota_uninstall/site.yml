@@ -25,17 +25,17 @@
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log"
         state: absent
-    # Ansibleのアンインストールはコメントアウトしてあります(不用意な削除防止のため)
-    # - name: 5. Ansibleの設定とキャッシュを削除 Remove Ansible user directories
-      # ansible.builtin.file:
-        # path: "{{ ansible_env.HOME }}/.ansible"
-        # state: absent
-    # - name: 6. Ansibleを削除 Remove ansible package
-      # ansible.builtin.apt:
-        # name:
-          # - ansible
-          # - ansible-core
-        # state: absent
-        # purge: true
-      # become: true
+    # Ansibleのアンインストールは有効です
+    - name: 5. Ansibleの設定とキャッシュを削除 Remove Ansible user directories
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible"
+        state: absent
+    - name: 6. Ansibleを削除 Remove ansible package
+      ansible.builtin.apt:
+        name:
+          - ansible
+          - ansible-core
+        state: absent
+        purge: true
+      become: true
 ...
