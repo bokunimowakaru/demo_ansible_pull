@@ -21,4 +21,18 @@
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log"
         state: absent
+    ###########################################################################
+    ## Ansible 本体の削除について
+    ## ・以下(シーケンスname: 5.)は誤操作防止のためコメントアウトしてあります。
+    ## ・使用したい場合は「# 」を消してください。sed "s/#\ //" で削除できます。
+    ## ・Ansible本体の削除につき、削除後の継続が出来ずエラー停止します。
+    ###########################################################################
+    # - name: 5. Ansibleを削除する Remove ansible package
+      # ansible.builtin.apt:
+        # name:
+          # - ansible
+          # - ansible-core
+        # state: absent
+        # purge: true
+      # become: true
 ...
