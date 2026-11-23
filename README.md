@@ -54,3 +54,5 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
 | [pb04_ota_rollback](pb04_ota_rollback/site.yml) | デモ用ソフトの更新を実行し、更新に失敗した場合は復元します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb04\|bash' |
 | [pb04_ota_rollback_error](pb04_ota_rollback_error/site.yml) | 更新失敗を模擬し、バックアップからの復元を試します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb04e\|bash' |
 | [pb05_ota_uninstall](pb05_ota_uninstall/site.yml) | デモ用ソフトや更新ツール、ログ、cron 設定を消去します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb05\|bash'|
+| | 以下はAIによる改良版 |
+| [pb04_ota_rollback_ai](pb04_ota_rollback_ai/site.yml) | 考慮不足をAIで改良したサンプルの一例。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb04ai\|bash' |
