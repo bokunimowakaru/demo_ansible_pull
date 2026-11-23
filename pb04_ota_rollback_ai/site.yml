@@ -1,0 +1,143 @@
+---
+- name: OTA with rollback
+  hosts: localhost
+  connection: local
+  pre_tasks:
+    - name: Pre 0. 実行ユーザー名を取得する Read the original execution user
+      ansible.builtin.set_fact:
+        ota_user: "{{ ansible_user_id }}"
+    - name: Pre 1. インストール先を作成する Ensure application directory exists
+      ansible.builtin.file:
+        path: /opt/ota-demo
+        state: directory
+        mode: '0755'
+      become: true
+    - name: Pre 2. ログ保存先を作成する Ensure log directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/ota-log"
+        state: directory
+        mode: '0755'
+    - name: Pre 3. 既存アプリの状態を確認する Inspect existing application
+      ansible.builtin.stat:
+        path: /opt/ota-demo/hello-ota.sh
+        follow: false
+      register: ota_previous_stat
+      become: true
+    - name: Pre 4. 既存アプリが通常ファイルであることを確認する Validate existing application
+      ansible.builtin.assert:
+        that:
+          - not ota_previous_stat.stat.exists or (ota_previous_stat.stat.isreg | default(false))
+        fail_msg: "Existing application is not a regular file; refusing to replace it."
+    - name: Pre 5. ロールバック状態を初期化する Initialize rollback state
+      ansible.builtin.set_fact:
+        ota_backup_ready: false
+  tasks:
+    - name: 1. デモ用ソフトを更新して検証する Update and verify application
+      block: # 試行の開始
+        - name: Try 1. 現行版をバックアップする Backup current application
+          ansible.builtin.copy:
+            src: /opt/ota-demo/hello-ota.sh
+            dest: /opt/ota-demo/hello-ota.sh.bak
+            remote_src: true
+            mode: preserve
+          become: true
+          when: ota_previous_stat.stat.exists
+        - name: Try 2. バックアップを検証する Verify backup
+          ansible.builtin.stat:
+            path: /opt/ota-demo/hello-ota.sh.bak
+            checksum_algorithm: sha256
+          register: ota_backup_stat
+          become: true
+          when: ota_previous_stat.stat.exists
+        - name: Try 3. バックアップが有効であることを確認する Validate backup
+          ansible.builtin.assert:
+            that:
+              - ota_backup_stat.stat.exists
+              - ota_backup_stat.stat.isreg
+              - ota_backup_stat.stat.checksum is defined
+            fail_msg: "Could not verify the application backup; the current application was not replaced."
+          when: ota_previous_stat.stat.exists
+        - name: Try 4. バックアップを利用可能にする Mark backup ready
+          ansible.builtin.set_fact:
+            ota_backup_ready: true
+          when: ota_previous_stat.stat.exists
+        - name: Try 5. ソフトを更新する Update application
+          ansible.builtin.copy:
+            src: files/hello-ota.sh
+            dest: /opt/ota-demo/hello-ota.sh
+            mode: '0755'
+          become: true
+        - name: Try 6. 実行した出力値を確認する Check application
+          ansible.builtin.command:
+            cmd: /opt/ota-demo/hello-ota.sh
+          register: app_result
+          failed_when: app_result.rc != 0 or '[Demo Ansible][pb04]' not in app_result.stdout
+      rescue: # 既存版があれば検証済みバックアップから復元し、初回導入なら新規ファイルを除去
+        - name: Rollback 1. バックアップから現行版を戻す Restore previous application
+          ansible.builtin.copy:
+            src: /opt/ota-demo/hello-ota.sh.bak
+            dest: /opt/ota-demo/hello-ota.sh
+            remote_src: true
+            mode: preserve
+            owner: "{{ ota_previous_stat.stat.uid }}"
+            group: "{{ ota_previous_stat.stat.gid }}"
+          become: true
+          when:
+            - ota_previous_stat.stat.exists
+            - ota_backup_ready
+        - name: Rollback 2. 復元内容を確認する Verify restored application
+          ansible.builtin.stat:
+            path: /opt/ota-demo/hello-ota.sh
+            checksum_algorithm: sha256
+          register: ota_restored_stat
+          become: true
+          when:
+            - ota_previous_stat.stat.exists
+            - ota_backup_ready
+        - name: Rollback 3. 復元結果がバックアップと一致することを確認する Validate restored application
+          ansible.builtin.assert:
+            that:
+              - ota_restored_stat.stat.checksum == ota_backup_stat.stat.checksum
+            fail_msg: "Rollback verification failed: restored application does not match the backup."
+          when:
+            - ota_previous_stat.stat.exists
+            - ota_backup_ready
+        - name: Rollback 4. 初回導入に失敗したファイルを除去する Remove failed first installation
+          ansible.builtin.file:
+            path: /opt/ota-demo/hello-ota.sh
+            state: absent
+          become: true
+          when: not ota_previous_stat.stat.exists
+        - name: Rollback 5. 失敗を通知する Report rollback result
+          ansible.builtin.fail:
+            msg: >-
+              {% if ota_previous_stat.stat.exists and ota_backup_ready %}
+              OTA failed. Previous version was restored and verified.
+              {% elif ota_previous_stat.stat.exists %}
+              OTA failed before replacement. The original application was left untouched because its backup was not verified.
+              {% else %}
+              OTA failed. No previous application existed; the failed installation was removed.
+              {% endif %}
+    - name: 2. 更新ツール「update.sh」をインストールする Install Updater
+      ansible.builtin.copy:
+        src: files/update.sh
+        dest: /opt/ota-demo/update.sh
+        mode: '0755'
+      become: true
+    - name: 3. 更新ツールにパスワードなしsudo許可を設定 Password-less sudo
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/ota-demo
+        owner: root
+        group: root
+        mode: '0440'
+        content: |
+          {{ ota_user }} ALL=(root) NOPASSWD: /opt/ota-demo/update.sh
+        validate: '/usr/sbin/visudo -cf %s'
+      become: true
+    - name: 4. 更新ツールの自動実行AM3時を設定する Schedule daily OTA update
+      ansible.builtin.cron:
+        name: "Daily OTA update"
+        minute: "0"
+        hour: "3"
+        job: "/usr/bin/sudo -n /opt/ota-demo/update.sh {{ ansible_env.HOME }}/ota-log/demo_ansible.log"
+...
