@@ -25,7 +25,7 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
    ```
 4. スクリプトを実行します（例：初回インストール）。
    ```sh
-   curl -fsL https://bokunimo.net/cq/ansib1|bash
+   curl -fsL https://bokunimo.net/cq/a/pb01|bash
    ```
    Gitでcloneしていた場合は、下記のコマンドで実行できます。
    ```sh
@@ -42,15 +42,15 @@ Raspberry Pi OS 上で Ansible を準備し、目的に合ったスクリプト�
    2026/11/08 10:33 [Demo Ansible][pb01]: Hello, world! - version pb01
    ```
 
-- 日次更新の例`exo3`では、`pb03_ota.sh` を実行すると毎日午前3時の更新ジョブが設定されます。アンインストール例`pb05`は `/opt/ota-demo` とホームディレクトリ内の demo_ansible.log` を削除するため注意してください。
+- 日次更新の例`pb03`では、`pb03_ota.sh` を実行すると毎日午前3時の更新ジョブが設定されます。アンインストール例`pb05`は `/opt/ota-demo` とホームディレクトリ内の demo_ansible.log` を削除するため注意してください。
 
 ## Playbook の一覧
 
 | Playbook | 説明 |
 | --- | --- |
-| [pb01_ota_install](pb01_ota_install/site.yml) | デモ用ソフトをインストールして実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib1\|bash' |
-| [pb02_ota_update](pb02_ota_update/site.yml) | デモ用ソフトの更新と、更新ツールのインストールを実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib2\|bash' |
-| [pb03_ota_cron](pb03_ota_cron/site.yml) | 毎日午前3時に更新を実行する cron を設定します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib3\|bash' |
-| [pb04_ota_rollback](pb04_ota_rollback/site.yml) | デモ用ソフトの更新を実行し、更新に失敗した場合は復元します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4\|bash' |
-| [pb04_ota_rollback_error](pb04_ota_rollback_error/site.yml) | 更新失敗を模擬し、バックアップからの復元を試します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib4e\|bash' |
-| [pb05_ota_uninstall](pb05_ota_uninstall/site.yml) | デモ用ソフトや更新ツール、ログ、cron 設定を消去します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/ansib5\|bash'|
+| [pb01_ota_install](pb01_ota_install/site.yml) | デモ用ソフトをインストールして実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb01\|bash' |
+| [pb02_ota_update](pb02_ota_update/site.yml) | デモ用ソフトの更新と、更新ツールのインストールを実行します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb02\|bash' |
+| [pb03_ota_cron](pb03_ota_cron/site.yml) | 毎日午前3時に更新を実行する cron を設定します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb03\|bash' |
+| [pb04_ota_rollback](pb04_ota_rollback/site.yml) | デモ用ソフトの更新を実行し、更新に失敗した場合は復元します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb04\|bash' |
+| [pb04_ota_rollback_error](pb04_ota_rollback_error/site.yml) | 更新失敗を模擬し、バックアップからの復元を試します。<br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb04e\|bash' |
+| [pb05_ota_uninstall](pb05_ota_uninstall/site.yml) | デモ用ソフトや更新ツール、ログ、cron 設定を消去します。 <br>実行方法: 'curl -fsL https://bokunimo.net/cq/a/pb05\|bash'|
