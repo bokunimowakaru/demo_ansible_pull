@@ -14,7 +14,7 @@
         path: "{{ ansible_env.HOME }}/ota-log"
         state: directory
         mode: '0755'
-    - name: 3. ログファイルを作成する Create or update log file
+    - name: 3. ログ・ファイルを作成する Create or update log file
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log/demo_ansible.log"
         state: touch

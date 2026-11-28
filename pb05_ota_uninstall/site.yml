@@ -17,7 +17,7 @@
         path: /opt/ota-demo
         state: absent
       become: true
-    - name: 4. ログファイルを削除する Remove log files directory and files
+    - name: 4. ログ・ファイルを削除する Remove log files directory and files
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/ota-log"
         state: absent
